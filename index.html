@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aisha Enterprise management System</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #f8fafc;
+            --sidebar-bg: #0f172a;
+            --sidebar-hover: #1e293b;
+            --computing-color: #06b6d4;
+            --computing-bg: #ecfeff;
+            --computing-border: #a5f3fc;
+            --fashion-color: #e11d48;
+            --fashion-bg: #fff1f2;
+            --fashion-border: #fecdd3;
+            --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: #334155;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Layout */
+        #sidebar-wrapper {
+            min-height: 100vh;
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            transition: margin 0.25s ease-out;
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+            list-style: none;
+        }
+
+        .sidebar-nav .nav-item .nav-link {
+            padding: 0.85rem 1.5rem;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .sidebar-nav .nav-item .nav-link:hover,
+        .sidebar-nav .nav-item .nav-link.active {
+            color: #ffffff;
+            background-color: var(--sidebar-hover);
+            border-left-color: var(--computing-color);
+        }
+
+        /* Badges & Accents */
+        .badge-computing {
+            background-color: var(--computing-bg);
+            color: #0891b2;
+            border: 1px solid var(--computing-border);
+            font-weight: 600;
+        }
+
+        .badge-fashion {
+            background-color: var(--fashion-bg);
+            color: #be123c;
+            border: 1px solid var(--fashion-border);
+            font-weight: 600;
+        }
+
+        .brand-computing-accent {
+            border-top: 4px solid var(--computing-color);
+        }
+
+        .brand-fashion-accent {
+            border-top: 4px solid var(--fashion-color);
+        }
+
+        /* KPI Cards */
+        .kpi-card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon-shape {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        /* Filter Controls */
+        .filter-btn {
+            border-radius: 30px;
+            padding: 0.4rem 1.2rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active[data-filter="all"] {
+            background: #0f172a;
+            color: #ffffff;
+            border-color: #0f172a;
+        }
+
+        .filter-btn.active[data-filter="computing"] {
+            background: var(--computing-color);
+            color: #ffffff;
+            border-color: var(--computing-color);
+        }
+
+        .filter-btn.active[data-filter="fashion"] {
+            background: var(--fashion-color);
+            color: #ffffff;
+            border-color: var(--fashion-color);
+        }
+
+        /* Kanban Layout */
+        .kanban-col {
+            background-color: #f1f5f9;
+            border-radius: 16px;
+            padding: 1rem;
+            min-height: 520px;
+        }
+
+        .kanban-header {
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .kanban-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.85rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+
+        .kanban-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Glassmorphism Header */
+        .top-navbar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #06b6d4 0%, #e11d48 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="d-flex" id="wrapper">
+    <!-- Navigation Sidebar -->
+    <div id="sidebar-wrapper">
+        <div class="sidebar-brand d-flex align-items-center gap-3">
+            <div class="avatar-circle fs-5">A</div>
+            <div>
+                <h6 class="text-white mb-0 fw-bold">Aisha Hub</h6>
+                <small class="text-muted" style="font-size: 0.75rem;">Computing & Fashion</small>
+            </div>
+        </div>
+        <ul class="sidebar-nav">
+            <li class="nav-item">
+                <a class="nav-link active" onclick="switchTab('dashboard')">
+                    <i class="fa-solid fa-chart-pie"></i> Executive Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="switchTab('orders')">
+                    <i class="fa-solid fa-list-check"></i> Orders & Requests
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="switchTab('kanban')">
+                    <i class="fa-solid fa-bars-staggered"></i> Work Kanban Board
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="switchTab('finance')">
+                    <i class="fa-solid fa-wallet"></i> Finance & Revenue
+                </a>
+            </li>
+        </ul>
+        <div class="p-3 position-absolute bottom-0 text-muted small" style="width: 260px;">
+            <hr class="border-secondary mb-2">
+            <div><i class="fa-solid fa-shop me-1"></i> Aisha Enterprise WMS</div>
+        </div>
+    </div>
+
+    <!-- Main Content View -->
+    <div id="page-content-wrapper" class="flex-grow-1">
+        <!-- Top Navbar -->
+        <nav class="top-navbar px-4 py-3 d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-light d-md-none" id="sidebarToggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <h5 class="fw-bold mb-0 text-dark">Aisha Management Console</h5>
+                    <small class="text-muted">Tech Repair & Tailoring Operations</small>
+                </div>
+            </div>
+
+            <!-- Global Context Filter -->
+            <div class="d-flex align-items-center gap-2">
+                <div class="btn-group" role="group" id="brandFilterGroup">
+                    <button type="button" class="filter-btn active" data-filter="all" onclick="setBrandFilter('all')">
+                        <i class="fa-solid fa-layer-group me-1"></i> All Brands
+                    </button>
+                    <button type="button" class="filter-btn" data-filter="computing" onclick="setBrandFilter('computing')">
+                        <i class="fa-solid fa-laptop me-1"></i> Computing
+                    </button>
+                    <button type="button" class="filter-btn" data-filter="fashion" onclick="setBrandFilter('fashion')">
+                        <i class="fa-solid fa-scissors me-1"></i> Fashion
+                    </button>
+                </div>
+
+                <button class="btn btn-primary rounded-pill px-3 shadow-sm ms-2" onclick="openNewOrderModal()">
+                    <i class="fa-solid fa-plus me-1"></i> New Order
+                </button>
+            </div>
+        </nav>
+
+        <div class="container-fluid px-4 py-4">
+
+            <!-- TAB 1: EXECUTIVE DASHBOARD -->
+            <div id="tab-dashboard" class="tab-content-section">
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card kpi-card p-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted small fw-semibold text-uppercase">Total Orders</span>
+                                    <h3 class="fw-bold text-dark mt-1 mb-0" id="kpi-total-orders">0</h3>
+                                    <small class="text-muted">Active Scope</small>
+                                </div>
+                                <div class="icon-shape bg-info bg-opacity-10 text-info">
+                                    <i class="fa-solid fa-clipboard-list"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card kpi-card p-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted small fw-semibold text-uppercase">Pending Tasks</span>
+                                    <h3 class="fw-bold text-warning mt-1 mb-0" id="kpi-pending-tasks">0</h3>
+                                    <small class="text-muted">Requires Action</small>
+                                </div>
+                                <div class="icon-shape bg-warning bg-opacity-10 text-warning">
+                                    <i class="fa-solid fa-clock"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card kpi-card p-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted small fw-semibold text-uppercase">Active Repairs / Designs</span>
+                                    <h3 class="fw-bold text-primary mt-1 mb-0" id="kpi-active-jobs">0</h3>
+                                    <small class="text-muted">In Production</small>
+                                </div>
+                                <div class="icon-shape bg-primary bg-opacity-10 text-primary">
+                                    <i class="fa-solid fa-gears"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card kpi-card p-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted small fw-semibold text-uppercase">Total Revenue</span>
+                                    <h3 class="fw-bold text-success mt-1 mb-0" id="kpi-total-revenue">NGN0.00</h3>
+                                    <small class="text-success"><i class="fa-solid fa-arrow-up"></i> Live Dynamic</small>
+                                </div>
+                                <div class="icon-shape bg-success bg-opacity-10 text-success">
+                                    <i class="fa-solid fa-sack-dollar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders Preview -->
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-lg-8">
+                        <div class="card border-0 shadow-sm rounded-4 h-100">
+                            <div class="card-header bg-white border-0 py-3 d-flex align-items-center justify-content-between">
+                                <h6 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>Recent Active Orders</h6>
+                                <button class="btn btn-sm btn-outline-secondary rounded-pill" onclick="switchTab('orders')">View All</button>
+                            </div>
+                            <div class="table-responsive px-3">
+                                <table class="table align-middle table-hover">
+                                    <thead class="table-light">
+                                        <tr class="text-muted small">
+                                            <th>BRAND</th>
+                                            <th>CUSTOMER</th>
+                                            <th>SERVICE / PRODUCT</th>
+                                            <th>STATUS</th>
+                                            <th>DUE DATE</th>
+                                            <th>AMOUNT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dashboard-orders-tbody">
+                                        <!-- Dynamic JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Operations Breakdown -->
+                    <div class="col-12 col-lg-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 p-3">
+                            <h6 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-chart-bar me-2 text-primary"></i>Brand Operations Summary</h6>
+                            
+                            <div class="p-3 mb-3 rounded-3 brand-computing-accent bg-light">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="fw-bold text-info"><i class="fa-solid fa-laptop me-1"></i> Aisha Computing</span>
+                                    <span class="badge badge-computing" id="summary-computing-count">0 Jobs</span>
+                                </div>
+                                <p class="text-muted small mb-2">Hardware repairs, screen replacement, IT setup</p>
+                            </div>
+
+                            <div class="p-3 rounded-3 brand-fashion-accent bg-light">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="fw-bold text-danger"><i class="fa-solid fa-scissors me-1"></i> Aisha Fashion</span>
+                                    <span class="badge badge-fashion" id="summary-fashion-count">0 Jobs</span>
+                                </div>
+                                <p class="text-muted small mb-2">Custom tailoring, Ankara styles, bridal wear</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: CLIENT ORDER TRACKER -->
+            <div id="tab-orders" class="tab-content-section d-none">
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-header bg-white border-0 py-3 d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                        <h6 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-list-check me-2 text-primary"></i>Client Order & Service Tracker</h6>
+                        <div class="d-flex gap-2">
+                            <input type="text" id="orderSearchInput" class="form-control form-control-sm rounded-pill" style="width: 220px;" placeholder="Search customer, item..." onkeyup="renderOrdersTable()">
+                            <select id="statusFilterSelect" class="form-select form-select-sm rounded-pill" style="width: 150px;" onchange="renderOrdersTable()">
+                                <option value="all">All Statuses</option>
+                                <option value="Pending">Pending</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Ready / Completed">Ready / Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-middle table-hover mb-0">
+                            <thead class="table-light">
+                                <tr class="text-muted small">
+                                    <th>ID</th>
+                                    <th>BRAND</th>
+                                    <th>CUSTOMER</th>
+                                    <th>DETAILS / ITEM</th>
+                                    <th>EST. COST</th>
+                                    <th>DUE DATE</th>
+                                    <th>STATUS</th>
+                                    <th>ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-master-tbody">
+                                <!-- Dynamic JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: TASK MANAGEMENT KANBAN BOARD -->
+            <div id="tab-kanban" class="tab-content-section d-none">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="fw-bold text-dark mb-0"><i class="fa-solid fa-bars-staggered me-2 text-primary"></i>Task Workflow Kanban</h6>
+                    <small class="text-muted">Use quick action controls to transition task state</small>
+                </div>
+                <div class="row g-3">
+                    <!-- Column: Pending -->
+                    <div class="col-12 col-md-4">
+                        <div class="kanban-col">
+                            <div class="kanban-header text-warning">
+                                <span><i class="fa-solid fa-hourglass-start me-2"></i>Pending Intake</span>
+                                <span class="badge bg-warning text-dark rounded-pill" id="count-kanban-pending">0</span>
+                            </div>
+                            <div id="kanban-pending-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- Column: In Progress -->
+                    <div class="col-12 col-md-4">
+                        <div class="kanban-col">
+                            <div class="kanban-header text-primary">
+                                <span><i class="fa-solid fa-gears me-2"></i>In Progress / Repair</span>
+                                <span class="badge bg-primary rounded-pill" id="count-kanban-progress">0</span>
+                            </div>
+                            <div id="kanban-progress-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- Column: Ready / Completed -->
+                    <div class="col-12 col-md-4">
+                        <div class="kanban-col">
+                            <div class="kanban-header text-success">
+                                <span><i class="fa-solid fa-circle-check me-2"></i>Ready / Completed</span>
+                                <span class="badge bg-success rounded-pill" id="count-kanban-completed">0</span>
+                            </div>
+                            <div id="kanban-completed-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: FINANCE & REVENUE LOGGER -->
+            <div id="tab-finance" class="tab-content-section d-none">
+                <div class="row g-4">
+                    <div class="col-12 col-lg-5">
+                        <div class="card border-0 shadow-sm rounded-4 p-4">
+                            <h6 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-receipt me-2 text-primary"></i>Log New Payment / Transaction</h6>
+                            <form id="financeForm" onsubmit="handleLogSale(event)">
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Brand Tag</label>
+                                    <select class="form-select" id="saleBrand" required>
+                                        <option value="computing">Aisha Computing</option>
+                                        <option value="fashion">Aisha Fashion</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Payment Description</label>
+                                    <input type="text" class="form-control" id="saleDesc" placeholder="e.g. Deposit for RAM Upgrade or Dress Sewing" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Amount Received (NGN)</label>
+                                    <input type="number" step="0.01" class="form-control" id="saleAmount" placeholder="0.00" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Payment Method</label>
+                                    <select class="form-select" id="saleMethod">
+                                        <option value="Cash">Cash</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
+                                        <option value="POS / Card">POS / Card</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100 rounded-3"><i class="fa-solid fa-check me-1"></i> Record Revenue</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-7">
+                        <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+                            <h6 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-history me-2 text-primary"></i>Financial Log History</h6>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead class="table-light">
+                                        <tr class="text-muted small">
+                                            <th>DATE</th>
+                                            <th>BRAND</th>
+                                            <th>DESCRIPTION</th>
+                                            <th>METHOD</th>
+                                            <th>AMOUNT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="finance-log-tbody">
+                                        <!-- Dynamic JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: ADD / EDIT ORDER -->
+<div class="modal fade" id="newOrderModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="orderModalTitle"><i class="fa-solid fa-circle-plus text-primary me-2"></i>Create New Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="orderForm" onsubmit="handleSaveOrder(event)">
+                    <input type="hidden" id="orderId">
+                    
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Select Brand Sector</label>
+                        <select class="form-select" id="orderBrand" required>
+                            <option value="computing">Aisha Computing (IT / Repairs)</option>
+                            <option value="fashion">Aisha Fashion (Custom Apparel / Sewing)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Customer Name</label>
+                        <input type="text" class="form-control" id="customerName" placeholder="e.g. Fatima Ali" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Service / Item Details</label>
+                        <textarea class="form-control" id="serviceDetails" rows="2" placeholder="e.g. HP Laptop OS Repair OR Silk Gown Sewing" required></textarea>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">Estimated Cost (NGN)</label>
+                            <input type="number" step="0.01" class="form-control" id="estimatedCost" placeholder="120.00" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">Target Due Date</label>
+                            <input type="date" class="form-control" id="dueDate" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Initial Status</label>
+                        <select class="form-select" id="orderStatus">
+                            <option value="Pending">Pending Intake</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Ready / Completed">Ready / Completed</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary rounded-3"><i class="fa-solid fa-save me-1"></i> Save Order Record</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // State Data
+    let currentBrandFilter = 'all';
+    let editingOrderId = null;
+
+    let orders = [
+        {
+            id: 'ORD-101',
+            brand: 'computing',
+            customer: 'Bello Ibrahim',
+            details: 'MacBook Pro Battery & Keyboard Replacement',
+            cost: 50.00,
+            dueDate: '2026-11-05',
+            status: 'In Progress'
+        },
+        {
+            id: 'ORD-102',
+            brand: 'fashion',
+            customer: 'Zainab Ahmed',
+            details: 'Custom Silk Aso-Ebi Gown with Embellishments',
+            cost: 25.00,
+            dueDate: '2026-11-08',
+            status: 'Pending'
+        },
+        {
+            id: 'ORD-103',
+            brand: 'computing',
+            customer: 'Kano Tech Office',
+            details: 'Desktop Network Setup & Diagnostics',
+            cost: 32.00,
+            dueDate: '2026-11-02',
+            status: 'Ready / Completed'
+        },
+        {
+            id: 'ORD-104',
+            brand: 'fashion',
+            customer: 'Amina Yusuf',
+            details: '3 Sets of Men Ankara Dashiki Shirts',
+            cost: 90.00,
+            dueDate: '2026-11-06',
+            status: 'In Progress'
+        }
+    ];
+
+    let financeLogs = [
+        { date: '2026-11-01', brand: 'computing', desc: 'Screen Repair - Bello I.', method: 'Bank Transfer', amount: 19.00 },
+        { date: '2026-11-01', brand: 'fashion', desc: 'Gown Deposit - Zainab A.', method: 'Cash', amount: 20.00 },
+        { date: '2026-10-31', brand: 'computing', desc: 'Software License Sales', method: 'POS / Card', amount: 15.00 }
+    ];
+
+    window.onload = function() {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('dueDate').value = tomorrow.toISOString().split('T')[0];
+
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar-wrapper');
+            sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
+        });
+
+        refreshAllViews();
+    };
+
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-content-section').forEach(sec => sec.classList.add('d-none'));
+        document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => link.classList.remove('active'));
+
+        document.getElementById(`tab-${tabName}`).classList.remove('d-none');
+        
+        const links = document.querySelectorAll('.sidebar-nav .nav-link');
+        if (tabName === 'dashboard') links[0].classList.add('active');
+        if (tabName === 'orders') links[1].classList.add('active');
+        if (tabName === 'kanban') links[2].classList.add('active');
+        if (tabName === 'finance') links[3].classList.add('active');
+    }
+
+    function setBrandFilter(filter) {
+        currentBrandFilter = filter;
+        
+        document.querySelectorAll('#brandFilterGroup .filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-filter') === filter) {
+                btn.classList.add('active');
+            }
+        });
+
+        refreshAllViews();
+    }
+
+    function refreshAllViews() {
+        renderKPIs();
+        renderDashboardOrders();
+        renderOrdersTable();
+        renderKanban();
+        renderFinanceLogs();
+    }
+
+    function filterDataByBrand(arr) {
+        if (currentBrandFilter === 'all') return arr;
+        return arr.filter(item => item.brand === currentBrandFilter);
+    }
+
+    function renderKPIs() {
+        const filteredOrders = filterDataByBrand(orders);
+        const filteredFinance = filterDataByBrand(financeLogs);
+
+        document.getElementById('kpi-total-orders').innerText = filteredOrders.length;
+        
+        const pendingCount = filteredOrders.filter(o => o.status === 'Pending').length;
+        document.getElementById('kpi-pending-tasks').innerText = pendingCount;
+
+        const activeJobsCount = filteredOrders.filter(o => o.status === 'In Progress').length;
+        document.getElementById('kpi-active-jobs').innerText = activeJobsCount;
+
+        const totalRev = filteredFinance.reduce((sum, item) => sum + Number(item.amount), 0);
+        document.getElementById('kpi-total-revenue').innerText = `$${totalRev.toFixed(2)}`;
+
+        const compCount = orders.filter(o => o.brand === 'computing').length;
+        const fashCount = orders.filter(o => o.brand === 'fashion').length;
+        document.getElementById('summary-computing-count').innerText = `${compCount} Total Jobs`;
+        document.getElementById('summary-fashion-count').innerText = `${fashCount} Total Jobs`;
+    }
+
+    function renderDashboardOrders() {
+        const tbody = document.getElementById('dashboard-orders-tbody');
+        tbody.innerHTML = '';
+
+        const list = filterDataByBrand(orders).slice(0, 5);
+
+        if(list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-3">No orders for selected brand scope.</td></tr>`;
+            return;
+        }
+
+        list.forEach(o => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${getBrandBadge(o.brand)}</td>
+                <td class="fw-bold">${escapeHtml(o.customer)}</td>
+                <td>${escapeHtml(o.details)}</td>
+                <td>${getStatusBadge(o.status)}</td>
+                <td class="small">${o.dueDate}</td>
+                <td class="fw-bold text-dark">$${Number(o.cost).toFixed(2)}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function renderOrdersTable() {
+        const tbody = document.getElementById('orders-master-tbody');
+        tbody.innerHTML = '';
+
+        const search = document.getElementById('orderSearchInput').value.toLowerCase();
+        const statusFilter = document.getElementById('statusFilterSelect').value;
+
+        let filtered = filterDataByBrand(orders);
+
+        if(statusFilter !== 'all') {
+            filtered = filtered.filter(o => o.status === statusFilter);
+        }
+
+        if(search) {
+            filtered = filtered.filter(o => 
+                o.customer.toLowerCase().includes(search) || 
+                o.details.toLowerCase().includes(search) ||
+                o.id.toLowerCase().includes(search)
+            );
+        }
+
+        if(filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4">No matching client orders found.</td></tr>`;
+            return;
+        }
+
+        filtered.forEach(o => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="fw-bold small text-secondary">${o.id}</td>
+                <td>${getBrandBadge(o.brand)}</td>
+                <td class="fw-semibold">${escapeHtml(o.customer)}</td>
+                <td>${escapeHtml(o.details)}</td>
+                <td class="fw-bold">$${Number(o.cost).toFixed(2)}</td>
+                <td class="small">${o.dueDate}</td>
+                <td>${getStatusBadge(o.status)}</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-primary" title="Edit Order" onclick="openEditOrderModal('${o.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-outline-secondary" title="Cycle Status" onclick="cycleStatus('${o.id}')"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        <button class="btn btn-outline-danger" title="Delete Order" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function renderKanban() {
+        const pendingList = document.getElementById('kanban-pending-list');
+        const progressList = document.getElementById('kanban-progress-list');
+        const completedList = document.getElementById('kanban-completed-list');
+
+        pendingList.innerHTML = '';
+        progressList.innerHTML = '';
+        completedList.innerHTML = '';
+
+        const filtered = filterDataByBrand(orders);
+
+        let countPending = 0, countProgress = 0, countCompleted = 0;
+
+        filtered.forEach(o => {
+            const card = createKanbanCard(o);
+            if(o.status === 'Pending') {
+                pendingList.appendChild(card);
+                countPending++;
+            } else if(o.status === 'In Progress') {
+                progressList.appendChild(card);
+                countProgress++;
+            } else {
+                completedList.appendChild(card);
+                countCompleted++;
+            }
+        });
+
+        document.getElementById('count-kanban-pending').innerText = countPending;
+        document.getElementById('count-kanban-progress').innerText = countProgress;
+        document.getElementById('count-kanban-completed').innerText = countCompleted;
+    }
+
+    function createKanbanCard(o) {
+        const card = document.createElement('div');
+        card.className = 'kanban-card';
+        card.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                ${getBrandBadge(o.brand)}
+                <small class="text-muted fw-semibold">${o.id}</small>
+            </div>
+            <h6 class="fw-bold mb-1 text-dark">${escapeHtml(o.customer)}</h6>
+            <p class="text-muted small mb-2">${escapeHtml(o.details)}</p>
+            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                <span class="small text-danger fw-semibold"><i class="fa-regular fa-calendar me-1"></i>${o.dueDate}</span>
+                <span class="fw-bold text-dark">$${Number(o.cost).toFixed(2)}</span>
+            </div>
+            <div class="mt-2 d-flex justify-content-between align-items-center">
+                <button class="btn btn-xs btn-link p-0 text-decoration-none text-secondary" style="font-size: 0.75rem" onclick="openEditOrderModal('${o.id}')"><i class="fa-solid fa-pen me-1"></i>Edit</button>
+                <div class="d-flex gap-1">
+                    ${o.status !== 'Pending' ? `<button class="btn btn-xs btn-light border py-0 px-2" style="font-size: 0.75rem" onclick="updateOrderStatus('${o.id}', 'Pending')">← Pending</button>` : ''}
+                    ${o.status !== 'In Progress' ? `<button class="btn btn-xs btn-light border py-0 px-2" style="font-size: 0.75rem" onclick="updateOrderStatus('${o.id}', 'In Progress')">In Progress</button>` : ''}
+                    ${o.status !== 'Ready / Completed' ? `<button class="btn btn-xs btn-success border py-0 px-2" style="font-size: 0.75rem" onclick="updateOrderStatus('${o.id}', 'Ready / Completed')">Ready ✓</button>` : ''}
+                </div>
+            </div>
+        `;
+        return card;
+    }
+
+    function renderFinanceLogs() {
+        const tbody = document.getElementById('finance-log-tbody');
+        tbody.innerHTML = '';
+
+        const list = filterDataByBrand(financeLogs);
+
+        if(list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-3">No financial logs for this brand selection.</td></tr>`;
+            return;
+        }
+
+        list.forEach(f => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="small text-muted">${f.date}</td>
+                <td>${getBrandBadge(f.brand)}</td>
+                <td class="fw-semibold">${escapeHtml(f.desc)}</td>
+                <td><span class="badge bg-light text-dark border">${f.method}</span></td>
+                <td class="fw-bold text-success">+$${Number(f.amount).toFixed(2)}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function openNewOrderModal() {
+        editingOrderId = null;
+        document.getElementById('orderModalTitle').innerHTML = `<i class="fa-solid fa-circle-plus text-primary me-2"></i>Create New Order`;
+        document.getElementById('orderForm').reset();
+        
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('dueDate').value = tomorrow.toISOString().split('T')[0];
+
+        const modal = new bootstrap.Modal(document.getElementById('newOrderModal'));
+        modal.show();
+    }
+
+    function openEditOrderModal(id) {
+        const order = orders.find(o => o.id === id);
+        if(!order) return;
+
+        editingOrderId = id;
+        document.getElementById('orderModalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-primary me-2"></i>Edit Order ${order.id}`;
+        
+        document.getElementById('orderBrand').value = order.brand;
+        document.getElementById('customerName').value = order.customer;
+        document.getElementById('serviceDetails').value = order.details;
+        document.getElementById('estimatedCost').value = order.cost;
+        document.getElementById('dueDate').value = order.dueDate;
+        document.getElementById('orderStatus').value = order.status;
+
+        const modal = new bootstrap.Modal(document.getElementById('newOrderModal'));
+        modal.show();
+    }
+
+    function handleSaveOrder(e) {
+        e.preventDefault();
+
+        if (editingOrderId) {
+            const target = orders.find(o => o.id === editingOrderId);
+            if (target) {
+                target.brand = document.getElementById('orderBrand').value;
+                target.customer = document.getElementById('customerName').value;
+                target.details = document.getElementById('serviceDetails').value;
+                target.cost = parseFloat(document.getElementById('estimatedCost').value) || 0;
+                target.dueDate = document.getElementById('dueDate').value;
+                target.status = document.getElementById('orderStatus').value;
+            }
+        } else {
+            const newObj = {
+                id: 'ORD-' + Math.floor(100 + Math.random() * 900),
+                brand: document.getElementById('orderBrand').value,
+                customer: document.getElementById('customerName').value,
+                details: document.getElementById('serviceDetails').value,
+                cost: parseFloat(document.getElementById('estimatedCost').value) || 0,
+                dueDate: document.getElementById('dueDate').value,
+                status: document.getElementById('orderStatus').value
+            };
+            orders.unshift(newObj);
+        }
+
+        const modalEl = document.getElementById('newOrderModal');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        if(modal) modal.hide();
+
+        document.getElementById('orderForm').reset();
+        editingOrderId = null;
+
+        refreshAllViews();
+    }
+
+    function handleLogSale(e) {
+        e.preventDefault();
+
+        const today = new Date().toISOString().split('T')[0];
+        const newSale = {
+            date: today,
+            brand: document.getElementById('saleBrand').value,
+            desc: document.getElementById('saleDesc').value,
+            amount: parseFloat(document.getElementById('saleAmount').value) || 0,
+            method: document.getElementById('saleMethod').value
+        };
+
+        financeLogs.unshift(newSale);
+        document.getElementById('financeForm').reset();
+        refreshAllViews();
+    }
+
+    function updateOrderStatus(id, newStatus) {
+        const target = orders.find(o => o.id === id);
+        if(target) {
+            target.status = newStatus;
+            refreshAllViews();
+        }
+    }
+
+    function cycleStatus(id) {
+        const target = orders.find(o => o.id === id);
+        if(target) {
+            if(target.status === 'Pending') target.status = 'In Progress';
+            else if(target.status === 'In Progress') target.status = 'Ready / Completed';
+            else target.status = 'Pending';
+            refreshAllViews();
+        }
+    }
+
+    function deleteOrder(id) {
+        orders = orders.filter(o => o.id !== id);
+        refreshAllViews();
+    }
+
+    function getBrandBadge(brand) {
+        if(brand === 'computing') {
+            return `<span class="badge badge-computing"><i class="fa-solid fa-laptop me-1"></i> Computing</span>`;
+        } else {
+            return `<span class="badge badge-fashion"><i class="fa-solid fa-scissors me-1"></i> Fashion</span>`;
+        }
+    }
+
+    function getStatusBadge(status) {
+        if(status === 'Pending') {
+            return `<span class="badge bg-warning text-dark"><i class="fa-solid fa-clock me-1"></i> Pending</span>`;
+        } else if(status === 'In Progress') {
+            return `<span class="badge bg-primary"><i class="fa-solid fa-spinner me-1"></i> In Progress</span>`;
+        } else {
+            return `<span class="badge bg-success"><i class="fa-solid fa-check me-1"></i> Ready / Completed</span>`;
+        }
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+</script>
+</body>
+</html>
